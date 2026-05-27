@@ -1,0 +1,730 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Labo III 2026 — Resumen</title>
+  <style>
+    :root {
+      --bg: #0f1117;
+      --surface: #1a1d27;
+      --surface2: #232737;
+      --accent: #6c63ff;
+      --accent2: #00d4aa;
+      --accent3: #ff6b6b;
+      --accent4: #ffd166;
+      --text: #e2e8f0;
+      --muted: #8892a4;
+      --border: #2d3148;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.7;
+    }
+
+    /* ── HERO ── */
+    .hero {
+      background: linear-gradient(135deg, #0f1117 0%, #1a1040 50%, #0f1117 100%);
+      padding: 80px 40px 60px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse 80% 60% at 50% 0%, rgba(108,99,255,.18) 0%, transparent 70%);
+    }
+    .hero-badge {
+      display: inline-block;
+      background: rgba(108,99,255,.2);
+      border: 1px solid rgba(108,99,255,.4);
+      color: #a89fff;
+      font-size: .8rem;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      padding: 4px 16px;
+      border-radius: 20px;
+      margin-bottom: 20px;
+    }
+    .hero h1 {
+      font-size: clamp(2rem, 5vw, 3.4rem);
+      font-weight: 800;
+      letter-spacing: -.02em;
+      background: linear-gradient(90deg, #fff 0%, #a89fff 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 16px;
+    }
+    .hero p {
+      font-size: 1.15rem;
+      color: var(--muted);
+      max-width: 640px;
+      margin: 0 auto 32px;
+    }
+    .hero-stats {
+      display: flex;
+      justify-content: center;
+      gap: 40px;
+      flex-wrap: wrap;
+    }
+    .stat { text-align: center; }
+    .stat-num {
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--accent2);
+    }
+    .stat-label {
+      font-size: .8rem;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: .08em;
+    }
+
+    /* ── LAYOUT ── */
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 32px 80px;
+    }
+
+    /* ── SECTIONS ── */
+    section { margin-top: 64px; }
+    .section-label {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 28px;
+    }
+    .section-label .icon {
+      width: 36px; height: 36px;
+      border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.1rem;
+    }
+    .section-label h2 {
+      font-size: 1.4rem;
+      font-weight: 700;
+    }
+    .section-label p {
+      font-size: .85rem;
+      color: var(--muted);
+    }
+
+    /* ── CARDS ── */
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 28px 32px;
+      margin-bottom: 20px;
+      transition: border-color .2s;
+    }
+    .card:hover { border-color: rgba(108,99,255,.4); }
+
+    .card-header {
+      display: flex;
+      align-items: flex-start;
+      gap: 16px;
+      margin-bottom: 16px;
+    }
+    .card-icon {
+      width: 44px; height: 44px; flex-shrink: 0;
+      border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.3rem;
+    }
+    .card h3 { font-size: 1.1rem; font-weight: 700; margin-bottom: 4px; }
+    .card .tag {
+      font-size: .72rem;
+      background: rgba(108,99,255,.15);
+      color: #a89fff;
+      border: 1px solid rgba(108,99,255,.25);
+      padding: 2px 10px;
+      border-radius: 10px;
+      display: inline-block;
+    }
+    .card p { color: var(--muted); font-size: .95rem; }
+
+    /* ── GRID ── */
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+    .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+    @media (max-width: 768px) {
+      .grid-2, .grid-3 { grid-template-columns: 1fr; }
+    }
+
+    /* ── PROBLEM BLOCK ── */
+    .problem-block {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      overflow: hidden;
+    }
+    .problem-block-header {
+      background: linear-gradient(90deg, rgba(108,99,255,.15), rgba(0,212,170,.08));
+      padding: 24px 32px;
+      border-bottom: 1px solid var(--border);
+    }
+    .problem-block-body { padding: 28px 32px; }
+
+    /* ── PIPELINE ── */
+    .pipeline {
+      display: flex;
+      align-items: stretch;
+      gap: 0;
+      overflow-x: auto;
+      padding-bottom: 8px;
+    }
+    .pipe-step {
+      flex: 1;
+      min-width: 130px;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 18px 16px;
+      text-align: center;
+      position: relative;
+    }
+    .pipe-step + .pipe-step { margin-left: 12px; }
+    .pipe-step .pipe-num {
+      font-size: .7rem;
+      color: var(--accent);
+      font-weight: 700;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      margin-bottom: 6px;
+    }
+    .pipe-step .pipe-icon { font-size: 1.6rem; margin-bottom: 8px; }
+    .pipe-step h4 { font-size: .9rem; font-weight: 700; }
+    .pipe-step p { font-size: .78rem; color: var(--muted); margin-top: 4px; }
+
+    /* ── MODELS TABLE ── */
+    .models-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: .9rem;
+    }
+    .models-table thead tr {
+      background: var(--surface2);
+    }
+    .models-table th {
+      text-align: left;
+      padding: 12px 16px;
+      color: var(--muted);
+      font-size: .78rem;
+      font-weight: 600;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      border-bottom: 1px solid var(--border);
+    }
+    .models-table td {
+      padding: 14px 16px;
+      border-bottom: 1px solid var(--border);
+      vertical-align: top;
+    }
+    .models-table tr:last-child td { border-bottom: none; }
+    .models-table tr:hover td { background: rgba(255,255,255,.02); }
+
+    .badge {
+      display: inline-block;
+      font-size: .72rem;
+      padding: 2px 10px;
+      border-radius: 10px;
+      font-weight: 600;
+    }
+    .badge-stat { background: rgba(108,99,255,.18); color: #a89fff; }
+    .badge-ml   { background: rgba(0,212,170,.15);  color: #00d4aa; }
+    .badge-base { background: rgba(255,209,102,.15); color: #ffd166; }
+    .badge-exp  { background: rgba(255,107,107,.15); color: #ff6b6b; }
+
+    /* ── GALACTUS BOX ── */
+    .galactus {
+      background: linear-gradient(135deg, rgba(255,107,107,.08), rgba(108,99,255,.08));
+      border: 1px solid rgba(255,107,107,.3);
+      border-radius: 16px;
+      padding: 28px 32px;
+    }
+    .galactus h3 { color: var(--accent3); margin-bottom: 12px; font-size: 1.1rem; }
+    .galactus .condition-row {
+      display: flex;
+      gap: 20px;
+      margin-top: 16px;
+    }
+    .condition-box {
+      flex: 1;
+      border-radius: 12px;
+      padding: 16px 18px;
+    }
+    .condition-box.keep { background: rgba(0,212,170,.08); border: 1px solid rgba(0,212,170,.2); }
+    .condition-box.destroy { background: rgba(255,107,107,.08); border: 1px solid rgba(255,107,107,.2); }
+    .condition-box h4 { font-size: .85rem; font-weight: 700; margin-bottom: 8px; }
+    .condition-box.keep h4 { color: var(--accent2); }
+    .condition-box.destroy h4 { color: var(--accent3); }
+    .condition-box ul { padding-left: 16px; font-size: .85rem; color: var(--muted); }
+    .condition-box ul li { margin-bottom: 4px; }
+
+    .conclusion-pills {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-top: 18px;
+    }
+    .pill {
+      padding: 8px 18px;
+      border-radius: 24px;
+      font-size: .85rem;
+      font-weight: 600;
+    }
+    .pill-ok  { background: rgba(0,212,170,.15); color: var(--accent2); border: 1px solid rgba(0,212,170,.25); }
+    .pill-bad { background: rgba(255,107,107,.15); color: var(--accent3); border: 1px solid rgba(255,107,107,.25); }
+
+    /* ── TWO PHASE ── */
+    .phase-row { display: flex; gap: 16px; }
+    .phase {
+      flex: 1;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 18px 20px;
+    }
+    .phase-num {
+      font-size: .7rem;
+      font-weight: 700;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      margin-bottom: 6px;
+    }
+    .phase-1 .phase-num { color: var(--accent); }
+    .phase-2 .phase-num { color: var(--accent2); }
+    .phase h4 { font-size: .95rem; font-weight: 700; margin-bottom: 6px; }
+    .phase p  { font-size: .83rem; color: var(--muted); }
+
+    /* ── TECH PILLS ── */
+    .tech-grid {
+      display: flex; flex-wrap: wrap; gap: 10px;
+      margin-top: 16px;
+    }
+    .tech-pill {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 6px 14px;
+      font-size: .82rem;
+      color: var(--text);
+    }
+    .tech-pill span { color: var(--muted); }
+
+    /* ── FOOTER ── */
+    footer {
+      text-align: center;
+      padding: 40px 20px;
+      color: var(--muted);
+      font-size: .82rem;
+      border-top: 1px solid var(--border);
+    }
+  </style>
+</head>
+<body>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-badge">Laboratorio III · 2026 · Rosario</div>
+  <h1>Forecasting de Ventas<br>con Series Temporales</h1>
+  <p>Predicción de ventas mensuales para 780 productos usando modelos estadísticos, AutoML y experimentos de validación temporal.</p>
+  <div class="hero-stats">
+    <div class="stat"><div class="stat-num">780</div><div class="stat-label">Productos</div></div>
+    <div class="stat"><div class="stat-num">36</div><div class="stat-label">Meses de historia</div></div>
+    <div class="stat"><div class="stat-num">5</div><div class="stat-label">Enfoques comparados</div></div>
+    <div class="stat"><div class="stat-num">202002</div><div class="stat-label">Período a predecir</div></div>
+  </div>
+</div>
+
+<div class="container">
+
+  <!-- ── PROBLEMA ── -->
+  <section>
+    <div class="section-label">
+      <div class="icon" style="background:rgba(108,99,255,.15)">🎯</div>
+      <div><h2>El Problema</h2><p>Contexto de la competencia Kaggle</p></div>
+    </div>
+
+    <div class="problem-block">
+      <div class="problem-block-header">
+        <h3 style="font-size:1.15rem;font-weight:700;margin-bottom:8px">Predicción de ventas — Febrero 2020</h3>
+        <p style="color:var(--muted);font-size:.92rem">
+          Dado el historial de ventas de <strong style="color:var(--text)">enero 2017 a diciembre 2019</strong>, predecir el volumen de ventas
+          de 780 productos distintos para el mes de <strong style="color:var(--accent2)">febrero 2020 (202002)</strong>.
+        </p>
+      </div>
+      <div class="problem-block-body">
+        <div class="grid-3">
+          <div>
+            <p style="font-size:.78rem;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px">Datos de entrada</p>
+            <ul style="padding-left:16px;color:var(--text);font-size:.88rem">
+              <li style="margin-bottom:4px"><code style="color:var(--accent2)">sell-in.txt.gz</code> — ventas históricas</li>
+              <li style="margin-bottom:4px"><code style="color:var(--accent2)">product_id_apredecir</code> — 780 SKUs objetivo</li>
+              <li style="margin-bottom:4px"><code style="color:var(--accent2)">tb_productos.txt</code> — metadatos de producto</li>
+              <li><code style="color:var(--accent2)">tb_stocks.txt</code> — niveles de stock</li>
+            </ul>
+          </div>
+          <div>
+            <p style="font-size:.78rem;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px">Desafíos</p>
+            <ul style="padding-left:16px;color:var(--text);font-size:.88rem">
+              <li style="margin-bottom:4px">Series con pocas observaciones</li>
+              <li style="margin-bottom:4px">Estacionalidad anual variable</li>
+              <li style="margin-bottom:4px">Productos con historial incompleto</li>
+              <li>Necesidad de validar aprendizaje temporal real</li>
+            </ul>
+          </div>
+          <div>
+            <p style="font-size:.78rem;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px">Métrica</p>
+            <div style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:14px;font-size:.88rem">
+              Evaluación en <strong>Kaggle</strong> mediante error cuadrático medio (RMSE / score público) sobre las 780 predicciones.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── PIPELINE ── -->
+  <section>
+    <div class="section-label">
+      <div class="icon" style="background:rgba(0,212,170,.12)">⚙️</div>
+      <div><h2>Pipeline General</h2><p>Flujo de trabajo común a todos los enfoques</p></div>
+    </div>
+    <div class="pipeline">
+      <div class="pipe-step">
+        <div class="pipe-num">Paso 1</div>
+        <div class="pipe-icon">📥</div>
+        <h4>Ingesta</h4>
+        <p>Carga desde GCS / Drive</p>
+      </div>
+      <div class="pipe-step">
+        <div class="pipe-num">Paso 2</div>
+        <div class="pipe-icon">🔧</div>
+        <h4>Preparación</h4>
+        <p>Pivot wide → una col. por mes</p>
+      </div>
+      <div class="pipe-step">
+        <div class="pipe-num">Paso 3</div>
+        <div class="pipe-icon">🧠</div>
+        <h4>Modelado</h4>
+        <p>Ajuste individual por serie</p>
+      </div>
+      <div class="pipe-step">
+        <div class="pipe-num">Paso 4</div>
+        <div class="pipe-icon">📊</div>
+        <h4>Predicción</h4>
+        <p>Forecast t+1 (Feb 2020)</p>
+      </div>
+      <div class="pipe-step">
+        <div class="pipe-num">Paso 5</div>
+        <div class="pipe-icon">🚀</div>
+        <h4>Submisión</h4>
+        <p>CSV → Kaggle API</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── MODELOS ── -->
+  <section>
+    <div class="section-label">
+      <div class="icon" style="background:rgba(255,209,102,.12)">📦</div>
+      <div><h2>Modelos Implementados</h2><p>Comparativa de los enfoques desarrollados</p></div>
+    </div>
+
+    <div class="card" style="padding:0;overflow:hidden">
+      <table class="models-table">
+        <thead>
+          <tr>
+            <th>Notebook</th>
+            <th>Modelo</th>
+            <th>Tipo</th>
+            <th>Descripción</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code style="color:var(--accent)">z211_Naif</code></td>
+            <td><strong>Naive × 3</strong></td>
+            <td><span class="badge badge-base">Baseline</span></td>
+            <td style="color:var(--muted);font-size:.88rem">
+              Tres variantes: (1) último valor, (2) promedio 12 meses, (3) mismo mes año anterior.
+              Implementado en <strong>Polars</strong>, <strong>DuckDB</strong> y <strong>R/data.table</strong>.
+            </td>
+          </tr>
+          <tr>
+            <td><code style="color:var(--accent)">z251_AutoARIMA</code></td>
+            <td><strong>AutoARIMA</strong></td>
+            <td><span class="badge badge-stat">Estadístico</span></td>
+            <td style="color:var(--muted);font-size:.88rem">
+              pmdarima con búsqueda stepwise + random (n_fits=10). Parámetros max p/q=3, max P/Q=2.
+              Dos fases: con y sin estacionalidad (m=12).
+            </td>
+          </tr>
+          <tr>
+            <td><code style="color:var(--accent)">z262_mundo_IDEAL</code></td>
+            <td><strong>IDEAL World</strong></td>
+            <td><span class="badge badge-exp">Experimento</span></td>
+            <td style="color:var(--muted);font-size:.88rem">
+              Benchmarking con datos sintéticos ideales (sin ruido) para medir el techo teórico del AutoARIMA.
+            </td>
+          </tr>
+          <tr>
+            <td><code style="color:var(--accent)">z252_Galactus</code></td>
+            <td><strong>AutoARIMA Galactus</strong></td>
+            <td><span class="badge badge-exp">Validación</span></td>
+            <td style="color:var(--muted);font-size:.88rem">
+              Variante que baraja la serie temporal para detectar si el modelo realmente captura estructura temporal.
+            </td>
+          </tr>
+          <tr>
+            <td><code style="color:var(--accent)">z316_AutoGluon</code></td>
+            <td><strong>AutoGluon TS</strong></td>
+            <td><span class="badge badge-ml">AutoML</span></td>
+            <td style="color:var(--muted);font-size:.88rem">
+              Ensemble automático: SeasonalNaive, AutoETS, DeepAR, TemporalFusionTransformer, Chronos, tabular.
+              Modelos globales entrenados sobre todas las series.
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ── NAIVE DETAIL ── -->
+  <section>
+    <div class="section-label">
+      <div class="icon" style="background:rgba(255,209,102,.12)">📏</div>
+      <div><h2>Modelos Naif (Baseline)</h2><p>Tres reglas simples como punto de comparación mínimo</p></div>
+    </div>
+    <div class="grid-3">
+      <div class="card">
+        <div class="card-header">
+          <div class="card-icon" style="background:rgba(255,209,102,.12);color:var(--accent4)">1️⃣</div>
+          <div>
+            <h3>Último Valor</h3>
+            <span class="tag">Persistence</span>
+          </div>
+        </div>
+        <p>La predicción de febrero 2020 es igual al valor de <strong>diciembre 2019</strong>. Sin memoria de largo plazo.</p>
+      </div>
+      <div class="card">
+        <div class="card-header">
+          <div class="card-icon" style="background:rgba(255,209,102,.12);color:var(--accent4)">2️⃣</div>
+          <div>
+            <h3>Promedio 12 meses</h3>
+            <span class="tag">Moving Average</span>
+          </div>
+        </div>
+        <p>Media de todos los meses de <strong>2019</strong>. Suaviza variaciones pero ignora estacionalidad.</p>
+      </div>
+      <div class="card">
+        <div class="card-header">
+          <div class="card-icon" style="background:rgba(255,209,102,.12);color:var(--accent4)">3️⃣</div>
+          <div>
+            <h3>Año anterior</h3>
+            <span class="tag">Seasonal Naive</span>
+          </div>
+        </div>
+        <p>Valor de <strong>febrero 2019</strong>. Captura estacionalidad anual. Fallback a promedio si no hay dato.</p>
+      </div>
+    </div>
+    <div class="card" style="margin-top:12px">
+      <p style="font-size:.88rem;color:var(--muted)">
+        <strong style="color:var(--text)">Implementaciones múltiples:</strong> cada modelo naive se desarrolló en tres tecnologías —
+        <span style="color:var(--accent2)">Polars</span> (DataFrames modernos en Python),
+        <span style="color:var(--accent)">DuckDB</span> (SQL analítico en memoria) y
+        <span style="color:var(--accent4)">R / data.table</span> — como ejercicio comparativo de herramientas.
+      </p>
+    </div>
+  </section>
+
+  <!-- ── AUTOARIMA ── -->
+  <section>
+    <div class="section-label">
+      <div class="icon" style="background:rgba(108,99,255,.15)">📈</div>
+      <div><h2>AutoARIMA</h2><p>Modelado estadístico clásico con selección automática de parámetros</p></div>
+    </div>
+
+    <div class="grid-2">
+      <div class="card">
+        <h3 style="margin-bottom:12px">Parámetros de búsqueda</h3>
+        <table style="width:100%;font-size:.85rem;border-collapse:collapse">
+          <tr><td style="color:var(--muted);padding:5px 0">Parte AR (p)</td><td style="color:var(--text)">0 – 3</td></tr>
+          <tr><td style="color:var(--muted);padding:5px 0">Parte MA (q)</td><td style="color:var(--text)">0 – 3</td></tr>
+          <tr><td style="color:var(--muted);padding:5px 0">AR estacional (P)</td><td style="color:var(--text)">0 – 2</td></tr>
+          <tr><td style="color:var(--muted);padding:5px 0">MA estacional (Q)</td><td style="color:var(--text)">0 – 2</td></tr>
+          <tr><td style="color:var(--muted);padding:5px 0">Diferenciación (d)</td><td style="color:var(--text)">automática</td></tr>
+          <tr><td style="color:var(--muted);padding:5px 0">Algoritmo</td><td style="color:var(--text)">stepwise + random (n_fits=10)</td></tr>
+          <tr><td style="color:var(--muted);padding:5px 0">Semilla</td><td style="color:var(--text)">102191</td></tr>
+        </table>
+      </div>
+      <div class="card">
+        <h3 style="margin-bottom:14px">Estrategia de dos fases</h3>
+        <div class="phase-row">
+          <div class="phase phase-1">
+            <div class="phase-num">Fase 1</div>
+            <h4>Con estacionalidad</h4>
+            <p>m=12. Para productos con historia suficiente que permite detectar ciclo anual.</p>
+          </div>
+          <div class="phase phase-2">
+            <div class="phase-num">Fase 2</div>
+            <h4>Sin estacionalidad</h4>
+            <p>m=1. Fallback para series con pocos datos donde la estimación estacional falla.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── GALACTUS ── -->
+  <section>
+    <div class="section-label">
+      <div class="icon" style="background:rgba(255,107,107,.12)">💥</div>
+      <div><h2>Experimento Galactus</h2><p>¿El modelo realmente aprende estructura temporal?</p></div>
+    </div>
+
+    <div class="galactus">
+      <h3>La idea central: "Empiojado Galactus"</h3>
+      <p style="color:var(--muted);font-size:.92rem;margin-bottom:4px">
+        Se toma la serie original y se <strong style="color:var(--accent3)">barajan aleatoriamente los 36 valores</strong>.
+        Si AutoARIMA da un score similar con datos barajados y con datos reales → el modelo <em>no está capturando estructura temporal real</em>.
+        Si el score empeora significativamente → el modelo sí aprende patrones de tiempo.
+      </p>
+      <div class="condition-row">
+        <div class="condition-box keep">
+          <h4>Se mantiene</h4>
+          <ul>
+            <li>Media global de los 36 meses</li>
+            <li>El conjunto de valores (solo el orden cambia)</li>
+          </ul>
+        </div>
+        <div class="condition-box destroy">
+          <h4>Se destruye</h4>
+          <ul>
+            <li>Tendencia</li>
+            <li>Estacionalidad</li>
+            <li>Promedio de últimos 12 meses</li>
+            <li>Valores año a año</li>
+          </ul>
+        </div>
+      </div>
+      <div class="conclusion-pills">
+        <div class="pill pill-ok">Score mejor con datos reales → modelo aprende</div>
+        <div class="pill pill-bad">Score similar con datos barajados → modelo no aprende</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── AUTOGLUON ── -->
+  <section>
+    <div class="section-label">
+      <div class="icon" style="background:rgba(0,212,170,.12)">🤖</div>
+      <div><h2>AutoGluon Time Series</h2><p>AutoML con ensemble de modelos globales</p></div>
+    </div>
+
+    <div class="grid-2">
+      <div class="card">
+        <h3 style="margin-bottom:14px">Modelos en el ensemble</h3>
+        <div style="display:flex;flex-direction:column;gap:8px">
+          <div style="display:flex;align-items:center;gap:10px;font-size:.88rem">
+            <span class="badge badge-base">Estadístico</span>
+            <span>SeasonalNaive, AutoETS</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:10px;font-size:.88rem">
+            <span class="badge badge-stat">Tabular</span>
+            <span>RecursiveTabular, DirectTabular</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:10px;font-size:.88rem">
+            <span class="badge badge-ml">Deep Learning</span>
+            <span>DeepAR, TemporalFusionTransformer</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:10px;font-size:.88rem">
+            <span class="badge badge-exp">Foundation</span>
+            <span>Chronos (modelo de lenguaje temporal)</span>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <h3 style="margin-bottom:14px">Ventajas del enfoque</h3>
+        <ul style="padding-left:16px;font-size:.88rem;color:var(--muted)">
+          <li style="margin-bottom:8px"><strong style="color:var(--text)">Modelos globales:</strong> aprenden relaciones entre las 780 series simultáneamente.</li>
+          <li style="margin-bottom:8px"><strong style="color:var(--text)">Ensemble automático:</strong> combina modelos según rendimiento en validación.</li>
+          <li style="margin-bottom:8px"><strong style="color:var(--text)">Límite de tiempo:</strong> 1 hora de entrenamiento configurable.</li>
+          <li><strong style="color:var(--text)">Métricas:</strong> RMSE y otras configurables por parámetro.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── TECNOLOGIAS ── -->
+  <section>
+    <div class="section-label">
+      <div class="icon" style="background:rgba(255,209,102,.12)">🛠️</div>
+      <div><h2>Tecnologías Utilizadas</h2><p>Stack del proyecto</p></div>
+    </div>
+    <div class="card">
+      <div class="grid-2" style="gap:32px">
+        <div>
+          <p style="font-size:.78rem;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:12px">Python</p>
+          <div class="tech-grid">
+            <span class="tech-pill">Polars <span>DataFrames</span></span>
+            <span class="tech-pill">DuckDB <span>SQL</span></span>
+            <span class="tech-pill">pmdarima <span>AutoARIMA</span></span>
+            <span class="tech-pill">AutoGluon <span>AutoML</span></span>
+            <span class="tech-pill">pandas <span>legacy</span></span>
+            <span class="tech-pill">numpy</span>
+          </div>
+        </div>
+        <div>
+          <p style="font-size:.78rem;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:12px">Entorno & Datos</p>
+          <div class="tech-grid">
+            <span class="tech-pill">Google Colab <span>notebooks</span></span>
+            <span class="tech-pill">Google Drive <span>storage</span></span>
+            <span class="tech-pill">Kaggle API <span>submit</span></span>
+            <span class="tech-pill">R / data.table <span>variante</span></span>
+            <span class="tech-pill">Git <span>versionado</span></span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── MAPA MENTAL ── -->
+  <section>
+    <div class="section-label">
+      <div class="icon" style="background:rgba(108,99,255,.15)">🗺️</div>
+      <div><h2>Estructura del Repositorio</h2><p>Organización de notebooks por enfoque</p></div>
+    </div>
+    <div class="card" style="padding:20px 24px">
+      <pre style="font-family:monospace;font-size:.85rem;color:var(--text);line-height:1.9;overflow-x:auto"><span style="color:var(--accent)">labo3-2026r/</span>
+├── <span style="color:var(--accent4)">z252_AutoARIMA_Galactus.ipynb</span>   <span style="color:var(--muted)">← Experimento de validación temporal</span>
+└── <span style="color:var(--accent2)">src/</span>
+    ├── <span style="color:var(--accent2)">naif/</span>
+    │   └── <span style="color:var(--accent4)">z211_Naif.ipynb</span>             <span style="color:var(--muted)">← Baselines (Polars · DuckDB · R)</span>
+    ├── <span style="color:var(--accent2)">Estadistica/</span>
+    │   ├── <span style="color:var(--accent4)">z251_AutoARIMA.ipynb</span>        <span style="color:var(--muted)">← ARIMA estándar, 2 fases</span>
+    │   └── <span style="color:var(--accent4)">z262_mundo_IDEAL.ipynb</span>      <span style="color:var(--muted)">← Benchmark con datos sintéticos</span>
+    └── <span style="color:var(--accent2)">AutoGluon/</span>
+        └── <span style="color:var(--accent4)">z316_AutoGluon.ipynb</span>        <span style="color:var(--muted)">← AutoML ensemble (DeepAR, TFT, Chronos…)</span></pre>
+    </div>
+  </section>
+
+</div>
+
+<footer>
+  Laboratorio III · 2026 · Universidad Nacional de Rosario &nbsp;·&nbsp;
+  Competencia Kaggle <em>labo-iii-2026-rosario</em>
+</footer>
+
+</body>
+</html>
