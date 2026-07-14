@@ -1,0 +1,78 @@
+# ============================================================
+# Pipeline config - Grupo 3: Banegas - Marín - Mengoni - Rey
+# ============================================================
+
+paths:
+  base:          "/home/ds/buckets/b1"
+  raw_sellin:    "/home/ds/buckets/b1/raw/sell-in.txt.gz"
+  raw_products:  "/home/ds/buckets/b1/raw/productos.csv"
+  preproc_out:   "/home/ds/buckets/b1/preproc"
+  fe_out:        "/home/ds/buckets/b1/fe"
+  optuna_out:    "/home/ds/buckets/b1/optuna"
+  models_out:    "/home/ds/buckets/b1/models"
+  submit_out:    "/home/ds/buckets/b1/submit"
+  mlflow_uri:    "file:///home/ds/buckets/b1/mlruns"
+
+gcs:
+  bucket:        "natalialabo3_bukito2026"
+  prefix_preproc: "preproc"
+  prefix_fe:     "fe"
+  prefix_optuna: "optuna"
+  prefix_models: "models"
+  prefix_submit: "submit"
+
+preproc:
+  group_mode:        "B"       # A=cliente-producto-mes  B=producto-mes
+  missing_strategy:  "zero"    # zero | null
+  densify_strategy:  "full"    # full | lifecycle
+  periodo_min:       201901
+  periodo_max:       202001    # último período conocido antes de 202002
+
+fe:
+  t0:               201910     # período de corte (último mes observable)
+  max_lags:         13         # cuántos meses de historia incluir
+  normalizacion:    "recta"    # recta | zscore | minmax | media
+  agregar_deltas:   true
+  salto_delta:      2
+  tipo_target:      "nivel"    # nivel | delta
+  # columnas que son candidatas a target; se usa solo la de tipo_target
+  target_col_nivel: "clase_tn"
+  target_col_delta: "clase_tn_delta"
+  cols_excluir_leakage:
+    - "clase_tn"
+    - "clase_tn_norm"
+    - "clase_tn_delta"
+    - "product_id"
+    - "periodo"
+
+leakage:
+  umbral_correlacion:    0.98
+  umbral_multicolineal:  0.995
+
+optuna:
+  n_trials:        80
+  n_folds:         5
+  semilla:         102191
+  metrica:         "wape"      # wape | rmse
+  esquema_val:     "expanding" # expanding | rolling
+  regularizacion:  "normal"    # normal | fuerte
+  decay_recencia:  false
+  objective_lgbm:  "regression"
+  sqlite_path:     "/home/ds/optuna_{MODO}.db"
+  experiment_name: "labo3_grupo3"
+
+lgbm_space:
+  num_leaves:        [20, 300]
+  learning_rate:     [0.01, 0.3]
+  n_estimators:      [100, 2000]
+  min_child_samples: [10, 100]
+  subsample:         [0.5, 1.0]
+  colsample_bytree:  [0.5, 1.0]
+  reg_alpha:         [0.0, 5.0]
+  reg_lambda:        [0.0, 5.0]
+
+train:
+  semillas_ensemble: [102191, 42, 7, 13, 99]
+  periodo_inferencia: 202002
+  kaggle_competition: "labo-iii-2026-rosario"
+  submit: true
